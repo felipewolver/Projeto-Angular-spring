@@ -1,0 +1,25 @@
+ Criando uma conta no Heroku e instalando o mesmo com GitHub 
+ * Ir no site www.heroku.com/ sign up for free/ informar seu dados e a linguagem
+ * de programação que utilaza e create/ depois ir
+ * nesse endereço para baixar os comandos do Heroku https://devcenter.heroku.com/articles/getting-started-with-java?singlepage=true#set-up 
+ * Depois intalar o github na sua maquina e clonar o seu projeto algamoneyfel-api para
+ * instalar: https://git-scm.com/download/win irar abri o download/ na instalação selecionar
+ * visual studio code/ depois segunda opção que a recomendada/ e soh next ateh instalar/ 
+ * Depois botao direito no terminal bash do git digitar: git config --global user.name "Felipe Ferreira de Oliveira"/
+   depois digitar git config --global user.email "felipeferreira_811@hotmail.com"/
+   clear para limpar tela(opcional)/ git config user.name para ver seu nome inserido/
+   git config user.email para ver email/ botao direito no visual studio e propriedades/
+   copiar o caminho de destino/ ir em painel de controle/ sistema de segurança/ sistema/
+   config avançadas do sistema/ variaveis de ambiente/ em variaveis do sistema clicar novo/
+   digitar nome da variavel/ colar aqui o caminho do studio code no valor da variavel e soh OK/
+   
+   Alguns comandos basicos do terminal git:]
+   cd, pwd para o caminho em que vc estah, mkdir pra criar pasta, touch para cria um arquivo, clear
+   ex. touch teste.txt 
+   
+   Clonagem do git para a maquina
+   No seu git do site copiar o link de clonagem e ir no bash e digitar:
+   git clone https://github.com/wolver98/Meu-Projeto-Agular-e-Spring.git    
+ 
+ * Agora no terminal Heroku digitar: heroku create algamoneyfel-api para criar um url https/ 
+ * Depois adicionar um banco de dados SQL com heroku addons:create jawsdb -a algamoneyfel-api   
