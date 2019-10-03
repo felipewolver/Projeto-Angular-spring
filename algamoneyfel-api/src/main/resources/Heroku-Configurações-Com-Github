@@ -22,4 +22,9 @@
    git clone https://github.com/wolver98/Meu-Projeto-Agular-e-Spring.git    
  
  * Agora no terminal Heroku digitar: heroku create algamoneyfel-api para criar um url https/ 
- * Depois adicionar um banco de dados SQL com heroku addons:create jawsdb -a algamoneyfel-api   
+ * Depois adicionar um banco de dados SQL com heroku addons:create jawsdb -a algamoneyfel-api/ 
+   DEpois será mostrado uma mensagem dizendo que foi criado como JAWSDB_URL/ agora digitar heroku config:get JAWSDB_URL
+   para configurar as urls criadas anteriomente em application-prod... e copiar texto depois do @/ digitar heroku config:set 
+   JDBC_DATABASE_URL=jdbc:mysql://e colar todo aquele texto aqui / agora copiar aquele texto antes do : que eh o user/
+   digitar JDBC_DATABASE_USERNAME=colar aqui esse antes do :/ agora pegar o texto depois do : antes do @/
+   digitar JDBC_DATABASE_PASSWORD=COLAR AQUI O TEXTO/ Depois heroku config para verificar as modificações
