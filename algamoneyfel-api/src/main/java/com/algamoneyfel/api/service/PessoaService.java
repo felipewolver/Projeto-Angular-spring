@@ -1,7 +1,5 @@
 package com.algamoneyfel.api.service;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,7 +17,10 @@ public class PessoaService {
 	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
 		
 		Pessoa pessoaSalva = buscarPessoaPeloCodigo(codigo);
-		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+		 // o parametro pessoa no beanUtils vai copiar as propriedades pessoa vindo da atualização para pessoaSalva do banco de dados
+		 // pessoaSalvo busca o codigo da pessoa selecionada como alvo(target)
+		 // o parametro codigo no BeanUtils vai ser ignorado na hora da atualização e ele eh o mesmo passado na url no Postman pessoa/codigo(ex. 3)
+		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo"); 
 		
 		return this.pessoasRep.save(pessoaSalva);
     }

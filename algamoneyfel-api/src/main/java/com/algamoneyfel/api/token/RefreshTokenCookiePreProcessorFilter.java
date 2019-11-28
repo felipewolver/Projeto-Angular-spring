@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,13 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.catalina.util.ParameterMap;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+@Profile("oauth-security")
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class RefreshTokenCookiePreProcessorFilter implements Filter {
+public class RefreshTokenCookiePreProcessorFilter implements Filter { 
     
 	// O metodo public destroy() e init() não serão usados
 	@Override
@@ -48,6 +51,16 @@ public class RefreshTokenCookiePreProcessorFilter implements Filter {
 		chain.doFilter(req, response);
 	}
 	
+	@Override
+	public void destroy() {
+		
+	}
+	
+	@Override
+	public void init(FilterConfig arg0) throws ServletException {
+		
+	}
+ 	
 
     static class MyServletRequestWrapper extends HttpServletRequestWrapper {
         
@@ -71,6 +84,6 @@ public class RefreshTokenCookiePreProcessorFilter implements Filter {
     		return map;
     	}
     
-    }
+    } 
 	
 }

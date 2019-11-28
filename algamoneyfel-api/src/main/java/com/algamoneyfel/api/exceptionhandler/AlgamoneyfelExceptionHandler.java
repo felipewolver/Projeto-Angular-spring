@@ -37,6 +37,7 @@ public class AlgamoneyfelExceptionHandler extends ResponseEntityExceptionHandler
 		//  arquivo messages.properties que contém a mensagem de exceção.
 		String msgUsuario = msgSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
 		String msgDesenvolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
+		                            // Classe Erro instanciada com os parametros inseridos com o metodo construtor
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 		
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
@@ -59,7 +60,7 @@ public class AlgamoneyfelExceptionHandler extends ResponseEntityExceptionHandler
 		// arquivo messages.properties que contém a mensagem de exceção.
 		String msgUsuario = msgSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
 		// Nesse não precisa do .getCause() pois jah eh uma exceção pronta para o metodo remover()
-		String msgDesenvolvedor = ex.toString();
+		String msgDesenvolvedor = ex.toString();  
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 		
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
@@ -95,6 +96,7 @@ public class AlgamoneyfelExceptionHandler extends ResponseEntityExceptionHandler
 		private String msgUsuario;
 		private String msgDesenvolvedor;
 		
+		// metodo contrutor 
 		public Erro(String msgUsuario, String msgDesenvolvedor) {
 			
 			this.msgUsuario = msgUsuario;

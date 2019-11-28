@@ -15,11 +15,18 @@
    
    Alguns comandos basicos do terminal git:]
    cd, pwd para o caminho em que vc estah, mkdir pra criar pasta, touch para cria um arquivo, clear
-   ex. touch teste.txt 
+   ex. touch teste.txt, git remote rm nome_remote, git rm -r file* remover todos os arquivos
    
    Clonagem do git para a maquina
+   senha de acesso: info98Git19
+   Obs: Não é necessario fazer a clonagem do git em sua maquina para o heroku basta digitar
+   no diretorio raiz deo seu projeto: git init para criar o .git e depois fazer as configurações do heroku
    No seu git do site copiar o link de clonagem e ir no bash e digitar:
-   git clone https://github.com/wolver98/Meu-Projeto-Agular-e-Spring.git    
+   git clone https://github.com/wolver98/Meu-Projeto-Agular-e-Spring.git 
+   Subindo para o GitHub: digitar git remote add origin https://github.com/wolver98/Meu-Projeto-Agular-e-Spring.git,
+     depois digitar: git push -u origin master para subir os arquivos pro github
+      
+   
  
  * Agora no terminal Heroku digitar: heroku create algamoneyfel-api para criar um url https/ 
  * Depois adicionar um banco de dados SQL com heroku addons:create jawsdb -a algamoneyfel-api/ 
@@ -31,4 +38,18 @@
    conferir o repositório criado para seu app digitar heroku info algamoneyfel-api/
    ver se esse repositório está correto e linkado com o diretório digitando git remote -v
    digitar init para iniciar o repositorio git/ digitar git remote add heroku https://git.heroku.com/nomedoprojeto.git/
-   Agora usar git add/ git commit -m "Mensagem de coommit"/ git push heroku master ou origin/master
+   Agora usar git add . git commit -m "Mensagem de coommit"/ git push heroku master ou origin/master
+   Outros comandos Heroku: 
+   heroku logs -a algamoneyfel-api -n 200 ou --tail O -n 200 exibi as ultimas 200 linhas do log. No site heroku logado na Aba 
+   Deploy esta explicando como subir para o repositorio heroku a partir de heroku login
+   
+   #Vindo da classe algamoneyfelapiproperts na notação @ConfigurationProperties
+   #Quando estiver rodando no Heroko trocar para true senao trocar para false
+   algamoneyfelapi.seguranca.enable-https=true
+   
+   Acesso Heroku: algamoneyfelapi.origin-permitida=https://algamoneyfel-api.herokuapp.com
+   Antiga segurança: spring.profiles.active=basic-security 
+   Criar o heroku para o angular: heroku apps:create algamoneyfel-angular
+   link do heroku no angular: https://algamoneyfel-angular.herokuapp.com | https://git.heroku.com/algamoneyfel-angular.git
+   	Colocar a URL do angular lá em application-prod.properties e colar a url na origin-permitida
+   

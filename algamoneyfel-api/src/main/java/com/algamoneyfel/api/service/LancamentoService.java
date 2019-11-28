@@ -2,7 +2,11 @@ package com.algamoneyfel.api.service;
 
 import java.util.Optional;
 
+import org.bouncycastle.crypto.tls.FiniteFieldDHEGroup;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.algamoneyfel.api.model.Lancamento;
@@ -31,6 +35,45 @@ public class LancamentoService {
 		}
 		
 		return this.lancamentosRep.save(lanc);
+	}
+	
+	public Lancamento atualizarServico(Long codigo, Lancamento lanc) {
+		
+		Lancamento lancSalvo = buscarLancamentoExistente(codigo); // metodo buscarLanc vind de private ResponseEntity... 
+		if (!lanc.getPessoa().equals(lancSalvo.getPessoa())) {
+			
+		   validarPessoa(lanc);
+		}
+		
+		BeanUtils.copyProperties(lanc, lancSalvo, "codigo");
+		
+		return this.lancamentosRep.save(lancSalvo);
+	}
+	
+	private void validarPessoa(Lancamento lanc) {
+		
+		Optional<Pessoa> pessoa = null;
+		if (lanc.getPessoa().getCodigo() != null) {
+			
+			pessoa =  this.pessoasRep.findById(lanc.getPessoa().getCodigo());
+		}
+		
+		if (pessoa == null || pessoa.get().isInativo()) {
+			
+			throw new pessoaInexistenteOuInativaException();
+		}
+	}
+	
+	private Lancamento buscarLancamentoExistente(Long codigo) {
+		
+		Lancamento lancSalvo = this.lancamentosRep.findById(codigo)
+				.orElseThrow(() -> new EmptyResultDataAccessException(1));
+		//if (lancSalvo == null) {
+			
+	//		throw new IllegalArgumentException();
+		//}
+		
+		return lancSalvo;
 	}
 	
 

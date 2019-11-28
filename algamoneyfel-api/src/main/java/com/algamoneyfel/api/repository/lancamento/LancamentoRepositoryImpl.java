@@ -2,6 +2,7 @@ package com.algamoneyfel.api.repository.lancamento;
 
 import java.util.ArrayList;
 import java.util.List;
+
 // Usar ctrl+shift+o para limpar imports nao usados
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,20 +15,16 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
+import org.springframework.util.StringUtils; // para uso isEmpty
 
-import com.algamoneyfel.api.model.Categoria_;
 import com.algamoneyfel.api.model.Lancamento;
-import com.algamoneyfel.api.model.Lancamento_;
-import com.algamoneyfel.api.model.Pessoa;
-import com.algamoneyfel.api.model.Pessoa_;
 import com.algamoneyfel.api.repository.filter.LancamentoFilter;
 import com.algamoneyfel.api.repository.projection.ResumoLancamento;
 
 // Classe responsável em cria uma lista de paginas para o lançamentos
 public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
 	
-	/* Usando MetaModel: Serve para evitar erros ao informar os campos de consulta e vai
+	/* Usando MetaModel: Serve para evitar erros ao digitando manualmente os campos de consulta e vai
 	 * gerar classes models com _. no final da classe ex Pessoa_. 
 	 * Botao direito em cima do projeto e clicar em properties,
 	 * javacompiler, Annotation Processing, habilitar as caixinhas e digitar
@@ -58,6 +55,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
 		return new PageImpl<>(query.getResultList(), pageable, total(lancFilter));
 	}
 	
+	// Criando a pagina Resumo e pegando os dados do metodo contrutor da Classe ResumoLancamento
 	@Override
 	public Page<ResumoLancamento> resumir(LancamentoFilter lancFilter, Pageable pageable) {
 		
@@ -66,11 +64,11 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
 		Root<Lancamento> root = criteria.from(Lancamento.class);
 		
 		criteria.select(builder.construct(ResumoLancamento.class, 
-				root.get(Lancamento_.CODIGO), root.get(Lancamento_.DESCRICAO),
-				root.get(Lancamento_.DATA_VENCIMENTO), root.get(Lancamento_.DATA_PAGAMENTO), 
-				root.get(Lancamento_.VALOR), root.get(Lancamento_.TIPO), 
-				root.get(Lancamento_.CATEGORIA).get(Categoria_.NOME), 
-				root.get(Lancamento_.PESSOA).get(Pessoa_.NOME) ));
+				root.get("codigo"), root.get("descricao"), // com metaModel: root.get(Lancamento_.DESCRICAO))
+				root.get("dataVencimento"), root.get("dataPagamento"), 
+				root.get("valor"), root.get("tipo"), 
+				root.get("categoria").get("nome"), 
+				root.get("pessoa").get("nome") ));
 		
 		//Criar as restrições
 		Predicate[] predicates = criarRestricoes(lancFilter, builder, root);
@@ -91,21 +89,21 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery{
         if (!StringUtils.isEmpty(lancFilter.getDescricao()) ) {
         	//Vai fazer uma consulta igual a o SQL procurando a descriação usando
         	// o lower para letras minusculas
-        	predicates.add(builder.like(builder.lower(root.get(Lancamento_.DESCRICAO))
+        	predicates.add(builder.like(builder.lower(root.get("descricao")) // com metaModel: root.get(Lancamento_.DESCRICAO))
         			, "%" + lancFilter.getDescricao().toLowerCase() + "%"));
         	
         }
         
         if (lancFilter.getDataVencimentoDe() != null) {
         	predicates.add(
-        			builder.greaterThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), 
+        			builder.greaterThanOrEqualTo(root.get("dataVencimento"), // com metaModel: root.get(Lancamento_.DATA_VENCIMENTO)
         					lancFilter.getDataVencimentoDe()));
         	
         }
         
         if (lancFilter.getDataVencimentoAte() != null) {
         	predicates.add(
-        			builder.lessThanOrEqualTo(root.get(Lancamento_.DATA_VENCIMENTO), 
+        			builder.lessThanOrEqualTo(root.get("dataVencimento"), // com metaModel: root.get(Lancamento_.DATA_VENCIMENTO)
         					lancFilter.getDataVencimentoAte()));
         	
         }

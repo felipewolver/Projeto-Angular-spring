@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class AlgamoneyFelApiProperty {
 	
 	private final Seguranca seguranca = new Seguranca();
-	private String originPermitida = "http://localhost:8000"; // Configura para diferentes ambientes
+	private String originPermitida = "http://localhost:4200"; // Configura para diferentes ambientes
 	
 	
 	public Seguranca getSeguranca() {

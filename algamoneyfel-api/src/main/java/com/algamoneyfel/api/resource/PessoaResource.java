@@ -1,16 +1,15 @@
 package com.algamoneyfel.api.resource;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,17 +20,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.algamoneyfel.api.event.RecursoCriadoEvent;
 import com.algamoneyfel.api.model.Pessoa;
 import com.algamoneyfel.api.repository.PessoaRepository;
+import com.algamoneyfel.api.repository.filter.PessoaFilter;
 import com.algamoneyfel.api.service.PessoaService;
-
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import net.bytebuddy.asm.Advice.This;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -46,12 +43,22 @@ public class PessoaResource {
 	@Autowired
 	private PessoaService pessoaServ;
 	
-	@GetMapping
+	// Metodo listar antigo sem uso do filtro de pesquisa
+	/*@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')") 
 	public List<Pessoa> listar() {
 		
 		return this.pessoasRep.findAll();
-	}
+	} */
+	
+	//Antes: public Page<Pessoa> pesquisar(@RequestParam(required = false, defaultValue = "%") String nome, boolean ativo, Pageable pageable) {
+	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
+	public Page<Pessoa> pesquisar(PessoaFilter pessoaFilter, Pageable pageable) {
+		
+		//return this.pessoasRep.findByNomeContainingAndAtivo(nome, ativo, pageable);
+		return this.pessoasRep.filtrar(pessoaFilter, pageable);
+	} 
 	
 	@GetMapping("/{cod}")
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -83,6 +90,7 @@ public class PessoaResource {
 		this.pessoasRep.deleteById(codigo);
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	@PutMapping("/{codigo}")
 	public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
 	    

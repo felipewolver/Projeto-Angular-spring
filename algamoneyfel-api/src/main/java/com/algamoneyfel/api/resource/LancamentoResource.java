@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -84,6 +85,7 @@ public class LancamentoResource {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
 	public ResponseEntity adicionar(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {
 		
 		// Antigo: Lancamento lancaSalva = this.lancamentosRep.save(lancamento);
@@ -95,6 +97,7 @@ public class LancamentoResource {
 	
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_LANCAMENTO') ")
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT) 
 	public void remover(@PathVariable Long codigo) {
@@ -112,6 +115,33 @@ public class LancamentoResource {
 		String msgDesenvolvedor = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 	    return ResponseEntity.badRequest().body(erros);
+	}
+	
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') ")
+	@PutMapping("/{codigo}")
+	public ResponseEntity atualizar(@PathVariable Long codigo, @Valid @RequestBody Lancamento lanc) {
+		try {
+			
+			Lancamento lancSalvo = this.lancaServ.atualizarServico(codigo, lanc);
+			return ResponseEntity.ok(lancSalvo);
+		} catch (IllegalArgumentException e) {
+			
+			return ResponseEntity.notFound().build();
+		}
+		
+	}
+	
+	// Metodo que vai buscar o codigo existente de um lancamento para ser usado no metodo atualizar
+	private ResponseEntity buscarLancametoExistente(Long codigo) {
+		
+		Optional<Lancamento> lancSalvo = this.lancamentosRep.findById(codigo);
+		if (lancSalvo == null) {
+			
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok(lancSalvo);
+		
 	}
 
 }
