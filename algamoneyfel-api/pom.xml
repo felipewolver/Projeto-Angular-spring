@@ -89,7 +89,7 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
 		 <!-- Depois que baixou nao precisa mais colocar a versao ver na aba pregress -->
-	 	    <version>3.4</version> 
+	 	    <version>3.18.0</version> 
 		</dependency>
 	    
 	   <!-- Add a dependencia do JpaModelJen -->
